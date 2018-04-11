@@ -1,10 +1,10 @@
 
-function isStable(grid::Array{Float32,1}, odd_grid::Array{Float32,1}, nrow::UInt32, ncol::UInt32, epsilon::Float32, unstableIdx)
+function isStable(grid::Array{Float32,1}, odd_grid::Array{Float32,1}, nrow::UInt32, ncol::UInt32, epsilon::Float32)
 
-	for i in unstableIdx:nrow*ncol
-		(abs(odd_grid[i] - grid[i]) > epsilon) && return i
+	for i in 1:nrow-2, j in 2:ncol-1
+		(abs(odd_grid[i*ncol + j] - grid[i*ncol + j]) > epsilon) && return false
 	end
-	return 0
+	return true
 end
 
 function display(grid::Array{Float32,1}, nrow::UInt32, ncol::UInt32)
@@ -39,12 +39,14 @@ function main()
 	odd_grid::Array{Float32,1} = copy(grid)
 
 	even = true
-	uidx = 1
-	while uidx != 0
+	stable = false
+	while !stable
 		stabilize( (even) ? grid : odd_grid,  (even) ? odd_grid : grid, nrow, ncol)
 		its += 1
 		even = !even	
-		uidx = (abs(grid[uidx] - odd_grid[uidx]) > epsilon) ? uidx : isStable(grid, odd_grid, nrow, ncol, epsilon, uidx)
+		#display(grid, nrow, ncol)
+		#display(updated_grid, nrow, ncol)
+		stable = (abs(grid[ncol + 2] - odd_grid[ncol + 2]) < epsilon) && isStable(grid, odd_grid, nrow, ncol, epsilon)
 	end
 	its -= 1
 	println(its)
