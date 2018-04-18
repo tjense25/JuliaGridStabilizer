@@ -41,14 +41,14 @@ function main()
 	even = true
 	uidx = 1
 	while uidx != 0
-		stabilize( (even) ? grid : odd_grid,  (even) ? odd_grid : grid, nrow, ncol)
+		stabilize( (even) ? grid : odd_grid, (even) ? odd_grid : grid, nrow, ncol)
 		its += 1
-		even = !even	
+		even = !even
 		uidx = (abs(grid[uidx] - odd_grid[uidx]) > epsilon) ? uidx : isStable(grid, odd_grid, nrow, ncol, epsilon, uidx)
 	end
 	its -= 1
 	println(its)
 end
 	
-
+addprocs()
 main()
